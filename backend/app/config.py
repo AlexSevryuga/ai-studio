@@ -16,7 +16,9 @@ class Settings(BaseSettings):
     # LLM
     OPENAI_API_KEY: str = ""
     ANTHROPIC_API_KEY: str = ""
-    LLM_MODEL: str = "claude-sonnet-4-20250514"
+    LLM_PROVIDER: str = "anthropic"  # "anthropic" or "openai"
+    OPENAI_MODEL: str = "gpt-4o"
+    ANTHROPIC_MODEL: str = "claude-sonnet-4-20250514"
 
     # Redis
     REDIS_URL: str = "redis://localhost:6379/0"

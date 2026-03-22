@@ -10,7 +10,7 @@ app = FastAPI(
 )
 
 app.add_middleware(
-    CORSMiddleware,  # type: ignore[invalid-argument-type]
+    CORSMiddleware,
     allow_origin_regex=r"https?://(localhost:3000|.*\.vercel\.app)",
     allow_credentials=True,
     allow_methods=["*"],
