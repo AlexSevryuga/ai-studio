@@ -1,7 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import auth, characters, clips, locations, orchestrator, projects, scenes, scripts
+from app.routers import (
+    auth,
+    characters,
+    clips,
+    locations,
+    orchestrator,
+    projects,
+    scenes,
+    scripts,
+    tasks,
+)
 
 app = FastAPI(
     title="AI Studio API",
@@ -25,6 +35,7 @@ app.include_router(clips.router)
 app.include_router(scripts.router)
 app.include_router(orchestrator.router)
 app.include_router(auth.router)
+app.include_router(tasks.router)
 
 
 @app.get("/api/health")

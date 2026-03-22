@@ -110,12 +110,17 @@ async def upload_file(
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    # TODO: Save to R2, parse file, extract text
-    # For now: just mark as ingested
-    project.source_file_url = f"r2://uploads/{project_id}/{file.filename}"
+    # Save to R2
+    from app.services.storage import generate_upload_path, upload_file_content
+
+    path = generate_upload_path(project_id, file.filename or "unknown")
+    content = await file.read()
+    url = upload_file_content(content, path)
+
+    project.source_file_url = url
     project.status = "ingested"
     project.updated_at = datetime.now(UTC)
 
     await db.commit()
 
-    return {"status": "uploaded", "filename": file.filename or "unknown"}
+    return {"status": "uploaded", "filename": file.filename or "unknown", "url": url}
