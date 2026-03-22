@@ -3,7 +3,8 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Eye } from "lucide-react"
+import { EmptyState } from "@/components/empty-state"
+import { ArrowLeft, Eye, Wand2 } from "lucide-react"
 
 async function getProject(id: string) {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
@@ -30,7 +31,7 @@ async function getScenes(projectId: string) {
 async function getClips(projectId: string) {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
   const scenes = await getScenes(projectId)
-  const allClips: unknown[] = []
+  const allClips: { id: string; order: number; prompt?: string; status?: string }[] = []
 
   for (const scene of scenes) {
     try {
@@ -58,21 +59,21 @@ export default async function VisionPage({ params }: { params: Promise<{ id: str
   const clips = await getClips(id)
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="p-6 space-y-6">
       <Link
         href={`/projects/${id}`}
-        className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back to project
       </Link>
 
-      <div className="mb-8 flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <div className="rounded-full bg-primary/10 p-3">
           <Eye className="h-6 w-6 text-primary" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold">Vision Prompts</h1>
+          <h1 className="text-2xl font-bold">Vision Prompts</h1>
           <p className="text-muted-foreground">
             AI-generated video prompts for {project.title}
           </p>
@@ -80,17 +81,12 @@ export default async function VisionPage({ params }: { params: Promise<{ id: str
       </div>
 
       {scenes.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-16">
-            <p className="mb-4 text-muted-foreground">No scenes to generate prompts for</p>
-            <p className="text-sm text-muted-foreground">
-              Create story structure first
-            </p>
-            <Button className="mt-4" asChild>
-              <Link href={`/projects/${id}/story`}>Go to Story</Link>
-            </Button>
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={<Wand2 className="h-12 w-12" />}
+          title="No scenes to generate prompts for"
+          description="Create story structure first to generate vision prompts."
+          action={{ label: "Go to Story", href: `/projects/${id}/story` }}
+        />
       ) : (
         <div className="space-y-6">
           <Card>
@@ -105,10 +101,10 @@ export default async function VisionPage({ params }: { params: Promise<{ id: str
                 {scenes.map((scene: { id: string; order: number; title: string }) => (
                   <div
                     key={scene.id}
-                    className="flex items-center justify-between rounded-lg border p-3"
+                    className="flex items-center justify-between rounded-lg border p-3 hover:bg-muted/30 transition-colors"
                   >
                     <span className="font-medium">
-                      {scene.order}. {scene.title}
+                      {scene.order}. {scene.title || `Scene ${scene.order}`}
                     </span>
                     <Button size="sm" variant="outline">
                       Generate
@@ -133,7 +129,9 @@ export default async function VisionPage({ params }: { params: Promise<{ id: str
                     <div key={clip.id} className="rounded-lg border p-3">
                       <div className="mb-2 flex items-center justify-between">
                         <span className="font-medium">Clip {clip.order}</span>
-                        <span className="rounded-full bg-primary/10 px-2 py-1 text-xs">
+                        <span className={`rounded-full px-2 py-0.5 text-xs ${
+                          clip.status === "done" ? "bg-green-500/10 text-green-500" : "bg-muted text-muted-foreground"
+                        }`}>
                           {clip.status || "draft"}
                         </span>
                       </div>

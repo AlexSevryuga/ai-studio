@@ -62,7 +62,7 @@ export default function NewProjectPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-2xl py-10">
+    <div className="max-w-2xl p-6">
       <Link
         href="/dashboard"
         className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
@@ -133,9 +133,9 @@ export default function NewProjectPage() {
               <Button type="submit" disabled={loading}>
                 {loading ? "Creating..." : "Create Project"}
               </Button>
-              <Button type="button" variant="outline" asChild>
-                <Link href="/dashboard">Cancel</Link>
-              </Button>
+              <Link href="/dashboard">
+                <Button type="button" variant="outline">Cancel</Button>
+              </Link>
             </div>
           </form>
         </CardContent>

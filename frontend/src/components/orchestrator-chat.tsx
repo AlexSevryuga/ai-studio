@@ -156,8 +156,8 @@ export function OrchestratorChat({ projectId, className }: OrchestratorChatProps
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button size="icon" className={cn("fixed right-4 bottom-4 z-50 h-12 w-12 rounded-full shadow-lg", className)}>
+      <SheetTrigger className={cn("fixed right-4 bottom-4 z-50", className)}>
+        <Button size="icon" className="h-12 w-12 rounded-full shadow-lg">
           <MessageSquare className="h-5 w-5" />
         </Button>
       </SheetTrigger>
