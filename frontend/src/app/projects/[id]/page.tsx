@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { OrchestratorChat } from "@/components/orchestrator-chat"
 import {
   BookOpen,
   Users,
@@ -170,6 +171,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           </Card>
         </TabsContent>
       </Tabs>
+
+      <OrchestratorChat projectId={id} />
     </div>
   )
 }
