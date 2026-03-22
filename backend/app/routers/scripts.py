@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.deps import TokenData, get_current_user
 from app.models import Script
 
 router = APIRouter(prefix="/api/scripts", tags=["scripts"])
@@ -16,6 +17,7 @@ router = APIRouter(prefix="/api/scripts", tags=["scripts"])
 async def list_scripts(
     scene_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> list[dict]:
     result = await db.execute(
         select(Script).where(Script.scene_id == scene_id).order_by(Script.version.desc())
@@ -38,6 +40,7 @@ async def create_script(
     scene_id: uuid.UUID,
     content: str,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> dict:
     # Get max version
     result = await db.execute(
@@ -69,6 +72,7 @@ async def update_script(
     script_id: uuid.UUID,
     content: str,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> dict:
     result = await db.execute(select(Script).where(Script.id == script_id))
     script = result.scalar_one_or_none()

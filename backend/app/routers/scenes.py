@@ -5,6 +5,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.deps import TokenData, get_current_user
 from app.models import Scene
 from app.schemas import SceneCreate, SceneReorder, SceneResponse, SceneUpdate
 
@@ -15,6 +16,7 @@ router = APIRouter(prefix="/api/scenes", tags=["scenes"])
 async def list_scenes(
     project_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> list[Scene]:
     result = await db.execute(
         select(Scene).where(Scene.project_id == project_id).order_by(Scene.order)
@@ -27,6 +29,7 @@ async def create_scene(
     project_id: uuid.UUID,
     data: SceneCreate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Scene:
     scene = Scene(
         project_id=project_id,
@@ -52,6 +55,7 @@ async def update_scene(
     scene_id: uuid.UUID,
     data: SceneUpdate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Scene:
     result = await db.execute(select(Scene).where(Scene.id == scene_id))
     scene = result.scalar_one_or_none()
@@ -74,6 +78,7 @@ async def update_scene(
 async def delete_scene(
     scene_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> None:
     result = await db.execute(select(Scene).where(Scene.id == scene_id))
     scene = result.scalar_one_or_none()
@@ -88,6 +93,7 @@ async def reorder_scenes(
     project_id: uuid.UUID,
     data: SceneReorder,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> None:
     for idx, scene_id in enumerate(data.scene_ids):
         await db.execute(

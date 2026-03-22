@@ -6,6 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.deps import TokenData, get_current_user
 from app.models import Project
 from app.schemas import ProjectCreate, ProjectResponse, ProjectUpdate
 
@@ -16,10 +17,13 @@ router = APIRouter(prefix="/api/projects", tags=["projects"])
 async def list_projects(
     owner_id: uuid.UUID | None = None,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> list[Project]:
     query = select(Project)
     if owner_id:
         query = query.where(Project.owner_id == owner_id)
+    else:
+        query = query.where(Project.owner_id == uuid.UUID(current_user.sub))
     query = query.order_by(Project.created_at.desc())
     result = await db.execute(query)
     return list(result.scalars().all())
@@ -29,12 +33,13 @@ async def list_projects(
 async def create_project(
     data: ProjectCreate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Project:
     project = Project(
         title=data.title,
         description=data.description,
         format=data.format.value,
-        owner_id=uuid.UUID("00000000-0000-0000-0000-000000000001"),  # TODO: from auth
+        owner_id=uuid.UUID(current_user.sub),
     )
     db.add(project)
     await db.commit()
@@ -46,6 +51,7 @@ async def create_project(
 async def get_project(
     project_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Project:
     result = await db.execute(select(Project).where(Project.id == project_id))
     project = result.scalar_one_or_none()
@@ -59,6 +65,7 @@ async def update_project(
     project_id: uuid.UUID,
     data: ProjectUpdate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Project:
     result = await db.execute(select(Project).where(Project.id == project_id))
     project = result.scalar_one_or_none()
@@ -81,6 +88,7 @@ async def update_project(
 async def delete_project(
     project_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> None:
     result = await db.execute(select(Project).where(Project.id == project_id))
     project = result.scalar_one_or_none()
@@ -95,6 +103,7 @@ async def upload_file(
     project_id: uuid.UUID,
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> dict[str, str]:
     result = await db.execute(select(Project).where(Project.id == project_id))
     project = result.scalar_one_or_none()

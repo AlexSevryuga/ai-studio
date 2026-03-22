@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import characters, clips, locations, orchestrator, projects, scenes, scripts
+from app.routers import auth, characters, clips, locations, orchestrator, projects, scenes, scripts
 
 app = FastAPI(
     title="AI Studio API",
@@ -10,7 +10,7 @@ app = FastAPI(
 )
 
 app.add_middleware(
-    CORSMiddleware,
+    CORSMiddleware,  # type: ignore[argument-type]
     allow_origin_regex=r"https?://(localhost:3000|.*\.vercel\.app)",
     allow_credentials=True,
     allow_methods=["*"],
@@ -24,6 +24,7 @@ app.include_router(scenes.router)
 app.include_router(clips.router)
 app.include_router(scripts.router)
 app.include_router(orchestrator.router)
+app.include_router(auth.router)
 
 
 @app.get("/api/health")

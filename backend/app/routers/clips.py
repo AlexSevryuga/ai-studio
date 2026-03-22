@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.deps import TokenData, get_current_user
 from app.models import Clip
 from app.schemas import ClipCreate, ClipResponse, ClipUpdate
 
@@ -15,6 +16,7 @@ router = APIRouter(prefix="/api/clips", tags=["clips"])
 async def list_clips(
     scene_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> list[Clip]:
     result = await db.execute(
         select(Clip).where(Clip.scene_id == scene_id).order_by(Clip.order)
@@ -27,6 +29,7 @@ async def create_clip(
     scene_id: uuid.UUID,
     data: ClipCreate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Clip:
     clip = Clip(
         scene_id=scene_id,
@@ -47,6 +50,7 @@ async def update_clip(
     clip_id: uuid.UUID,
     data: ClipUpdate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Clip:
     result = await db.execute(select(Clip).where(Clip.id == clip_id))
     clip = result.scalar_one_or_none()
@@ -67,6 +71,7 @@ async def update_clip(
 async def delete_clip(
     clip_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> None:
     result = await db.execute(select(Clip).where(Clip.id == clip_id))
     clip = result.scalar_one_or_none()
@@ -80,6 +85,7 @@ async def delete_clip(
 async def render_clip(
     clip_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> dict[str, str]:
     result = await db.execute(select(Clip).where(Clip.id == clip_id))
     clip = result.scalar_one_or_none()
@@ -97,6 +103,7 @@ async def render_clip(
 async def render_status(
     clip_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> dict[str, str]:
     result = await db.execute(select(Clip).where(Clip.id == clip_id))
     clip = result.scalar_one_or_none()

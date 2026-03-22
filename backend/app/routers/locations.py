@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.deps import TokenData, get_current_user
 from app.models import Location
 from app.schemas import LocationCreate, LocationResponse, LocationUpdate
 
@@ -15,6 +16,7 @@ router = APIRouter(prefix="/api/locations", tags=["locations"])
 async def list_locations(
     project_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> list[Location]:
     result = await db.execute(
         select(Location).where(Location.project_id == project_id).order_by(Location.name)
@@ -27,6 +29,7 @@ async def create_location(
     project_id: uuid.UUID,
     data: LocationCreate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Location:
     location = Location(
         project_id=project_id,
@@ -46,6 +49,7 @@ async def update_location(
     location_id: uuid.UUID,
     data: LocationUpdate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Location:
     result = await db.execute(select(Location).where(Location.id == location_id))
     location = result.scalar_one_or_none()
@@ -68,6 +72,7 @@ async def update_location(
 async def delete_location(
     location_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> None:
     result = await db.execute(select(Location).where(Location.id == location_id))
     location = result.scalar_one_or_none()

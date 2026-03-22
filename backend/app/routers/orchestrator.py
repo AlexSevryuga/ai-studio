@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.database import get_db
+from app.deps import TokenData, get_current_user
 from app.models import Project
 from app.schemas import OrchestratorRequest, OrchestratorResponse
 from app.services.orchestrator import Orchestrator
@@ -18,6 +19,7 @@ async def orchestrate(
     project_id: uuid.UUID,
     data: OrchestratorRequest,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> OrchestratorResponse:
     # Load project
     result = await db.execute(select(Project).where(Project.id == project_id))

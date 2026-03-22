@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.deps import TokenData, get_current_user
 from app.models import Character
 from app.schemas import CharacterCreate, CharacterResponse, CharacterUpdate
 
@@ -15,6 +16,7 @@ router = APIRouter(prefix="/api/characters", tags=["characters"])
 async def list_characters(
     project_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> list[Character]:
     result = await db.execute(
         select(Character).where(Character.project_id == project_id).order_by(Character.name)
@@ -27,6 +29,7 @@ async def create_character(
     project_id: uuid.UUID,
     data: CharacterCreate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Character:
     character = Character(
         project_id=project_id,
@@ -48,6 +51,7 @@ async def update_character(
     character_id: uuid.UUID,
     data: CharacterUpdate,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> Character:
     result = await db.execute(select(Character).where(Character.id == character_id))
     character = result.scalar_one_or_none()
@@ -70,6 +74,7 @@ async def update_character(
 async def delete_character(
     character_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
 ) -> None:
     result = await db.execute(select(Character).where(Character.id == character_id))
     character = result.scalar_one_or_none()
