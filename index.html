@@ -109,6 +109,10 @@ a:hover {
 }
 
 .animate-on-scroll {
+  opacity: 1;
+  transform: translateY(0);
+}
+.gsap-ready .animate-on-scroll {
   opacity: 0;
   transform: translateY(32px);
   transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
@@ -311,6 +315,9 @@ a:hover {
 
 .clip-line {
   display: inline-block;
+  clip-path: inset(0 0% 0 0);
+}
+.gsap-ready .clip-line {
   clip-path: inset(0 100% 0 0);
 }
 .clip-reveal {
@@ -2464,11 +2471,14 @@ footer {
   // ============================
   (function() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.querySelectorAll('.clip-line').forEach(function(el) {
-        el.style.clipPath = 'inset(0 0% 0 0)';
-      });
       return;
     }
+
+    // If GSAP didn't load (e.g. file:// protocol), everything stays visible via CSS defaults
+    if (typeof gsap === 'undefined') return;
+
+    // GSAP loaded — add class to enable hidden initial states
+    document.body.classList.add('gsap-ready');
 
     var tl = gsap.timeline({ delay: 0.2 });
 
