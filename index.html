@@ -20,16 +20,16 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Studio — Turn Your Book Into Film, Animation &amp; Games</title>
+<title>AI Studio — From Manuscript to Cinematic Trailer in Minutes</title>
 
 <!-- Meta Tags -->
 <meta name="description" content="Upload your book and let AI extract characters, locations, scenes — then generate scripts, storyboards and video prompts automatically. Powered by GPT-4o, Claude & Veo 3.1.">
-<meta property="og:title" content="AI Studio — Turn Your Book Into Film, Animation & Games">
+<meta property="og:title" content="AI Studio — From Manuscript to Cinematic Trailer in Minutes">
 <meta property="og:description" content="Upload your book and let AI extract characters, locations, scenes — then generate scripts, storyboards and video prompts automatically.">
 <meta property="og:image" content="og-image.svg">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AI Studio — Turn Your Book Into Film, Animation & Games">
+<meta name="twitter:title" content="AI Studio — From Manuscript to Cinematic Trailer in Minutes">
 <meta name="twitter:description" content="Upload your book and let AI extract characters, locations, scenes — then generate scripts, storyboards and video prompts automatically.">
 
 <!-- Google Fonts: Inter -->
@@ -1336,9 +1336,9 @@ h2 {
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  max-width: 800px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -1346,7 +1346,7 @@ h2 {
   background: #18181b;
   border: 1px solid #27272a;
   border-radius: 12px;
-  padding: 32px;
+  padding: 28px 20px;
   text-align: center;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
 }
@@ -1820,8 +1820,8 @@ footer {
   }
 
   .pricing-grid {
-    grid-template-columns: 1fr;
-    max-width: 360px;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 480px;
   }
 
   .testimonials {
@@ -1863,6 +1863,11 @@ footer {
 
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 320px;
   }
 }
 
@@ -1924,8 +1929,9 @@ footer {
 <section class="hero">
   <div class="hero-glow" id="heroGlow"></div>
   <div class="badge">✦ Powered by GPT-4o, Claude &amp; Veo 3.1</div>
-  <h1><span class="clip-line">Turn Your Book Into</span><br><span class="clip-line gradient">Film, Animation &amp; Games</span></h1>
-  <p class="subtitle">Upload your book. AI extracts characters, locations, scenes and generates scripts, storyboards and video prompts automatically.</p>
+  <h1><span class="clip-line">From Manuscript to</span><br><span class="clip-line gradient">Cinematic Trailer</span> <span class="clip-line">in Minutes</span></h1>
+  <p class="subtitle">Upload your book. AI builds a screenplay, storyboards and renders a cinematic trailer — ready for social media, pitches or production previews.</p>
+  <p class="subtitle" style="margin-top: 8px; font-size: 15px; opacity: 0.6;">Film, Animation &amp; Games — all from one pipeline.</p>
   <div class="hero-buttons">
     <a href="#" class="btn btn-primary">Start Free</a>
     <a href="#dashboard" class="btn btn-outline">See Example</a>
@@ -2265,34 +2271,48 @@ footer {
       <div class="price"><span class="price-amount">$0</span></div>
       <ul>
         <li>1 project</li>
+        <li>3 clips / month (Fast)</li>
+        <li>480p quality</li>
         <li>Basic parsing</li>
-        <li>5 scenes max</li>
         <li>Community support</li>
       </ul>
       <a href="#" class="btn btn-outline">Get Started</a>
     </div>
+    <div class="price-card animate-on-scroll" id="starterCard">
+      <h3>Starter</h3>
+      <div class="price"><span class="price-amount" id="starterPrice">$39</span> <span id="starterPeriod">/mo</span></div>
+      <ul>
+        <li>3 projects</li>
+        <li>10 clips / month (Fast)</li>
+        <li>720p quality</li>
+        <li>Full AI pipeline</li>
+        <li>Email support</li>
+      </ul>
+      <a href="#" class="btn btn-outline">Start Starter</a>
+    </div>
     <div class="price-card featured animate-on-scroll" id="proCard">
       <h3>Pro</h3>
-      <div class="price"><span class="price-amount" id="proPrice">$29</span> <span id="proPeriod">/mo</span></div>
+      <div class="price"><span class="price-amount" id="proPrice">$99</span> <span id="proPeriod">/mo</span></div>
       <ul>
-        <li>Unlimited projects</li>
-        <li>Full AI pipeline</li>
-        <li>Unlimited scenes</li>
-        <li>Video generation</li>
+        <li>10 projects</li>
+        <li>20 clips / month (Standard)</li>
+        <li>1080p quality</li>
+        <li>Priority rendering</li>
         <li>Priority support</li>
       </ul>
       <a href="#" class="btn btn-primary">Start Pro</a>
     </div>
-    <div class="price-card animate-on-scroll">
-      <h3>Enterprise</h3>
-      <div class="price"><span class="price-amount">Custom</span></div>
+    <div class="price-card animate-on-scroll" id="studioCard">
+      <h3>Studio</h3>
+      <div class="price"><span class="price-amount" id="studioPrice">$249</span> <span id="studioPeriod">/mo</span></div>
       <ul>
-        <li>Self-hosted option</li>
-        <li>Custom LLM models</li>
-        <li>Full API access</li>
-        <li>SLA support</li>
+        <li>Unlimited projects</li>
+        <li>100 clips / month (Standard)</li>
+        <li>1080p + HD upscale</li>
+        <li>API access</li>
+        <li>Dedicated support</li>
       </ul>
-      <a href="#" class="btn btn-outline">Contact Us</a>
+      <a href="#" class="btn btn-outline">Start Studio</a>
     </div>
   </div>
 </section>
@@ -2719,34 +2739,32 @@ footer {
   // Pricing toggle
   // ============================
   var pricingToggle = document.getElementById('pricingToggle');
-  var proPrice = document.getElementById('proPrice');
-  var proPeriod = document.getElementById('proPeriod');
   var monthlyLabel = document.getElementById('monthlyLabel');
   var annualLabel = document.getElementById('annualLabel');
   var saveBadge = document.getElementById('saveBadge');
+
+  var tiers = [
+    { el: document.getElementById('starterPrice'), monthly: '$39', annual: '$31' },
+    { el: document.getElementById('proPrice'),     monthly: '$99', annual: '$79' },
+    { el: document.getElementById('studioPrice'),  monthly: '$249', annual: '$199' }
+  ];
 
   if (pricingToggle) {
     pricingToggle.addEventListener('change', function() {
       var isAnnual = this.checked;
 
-      // Toggle label active states
       monthlyLabel.classList.toggle('active', !isAnnual);
       annualLabel.classList.toggle('active', isAnnual);
       saveBadge.classList.toggle('visible', isAnnual);
 
-      // Animate price change
-      proPrice.classList.add('changing');
-
-      setTimeout(function() {
-        if (isAnnual) {
-          proPrice.textContent = '$23.20';
-          proPeriod.textContent = '/mo';
-        } else {
-          proPrice.textContent = '$29';
-          proPeriod.textContent = '/mo';
-        }
-        proPrice.classList.remove('changing');
-      }, 150);
+      tiers.forEach(function(tier) {
+        if (!tier.el) return;
+        tier.el.classList.add('changing');
+        setTimeout(function() {
+          tier.el.textContent = isAnnual ? tier.annual : tier.monthly;
+          tier.el.classList.remove('changing');
+        }, 150);
+      });
     });
   }
 
